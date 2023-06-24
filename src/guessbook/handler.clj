@@ -6,7 +6,8 @@
             [compojure.handler :as handler]
             [compojure.route :as route]
             [guessbook.routes.home :refer [home-routes]]
-            [guessbook.models.db :as db]))
+            [guessbook.models.db :as db]
+            [guessbook.routes.auth :refer [auth-routes]]))
 
 (defn init []
   (println "guessbook is starting")
@@ -22,6 +23,6 @@
   (route/not-found "Not Found"))
 
 (def app
-  (-> (routes home-routes app-routes)
+  (-> (routes auth-routes home-routes app-routes)
       (handler/site)
       (wrap-base-url)))

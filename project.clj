@@ -6,7 +6,8 @@
                  [hiccup "1.0.5"]
                  [ring-server "0.5.0"]
                  [org.clojure/java.jdbc "0.7.12"]
-                 [org.xerial/sqlite-jdbc "3.36.0.3"]]
+                 [org.xerial/sqlite-jdbc "3.36.0.3"]
+                 [lib-noir "0.7.6"]]
   :plugins [[lein-ring "0.12.5"]]
   :ring {:handler guessbook.handler/app
          :init guessbook.handler/init

@@ -1,7 +1,7 @@
-(ns guessbook.test.handler
+(ns guestbook.test.handler
   (:use clojure.test
         ring.mock.request
-        guessbook.handler))
+        guestbook.handler))
 
 (deftest test-app
   (testing "main route"

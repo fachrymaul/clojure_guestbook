@@ -1,4 +1,4 @@
-(defproject guessbook "0.1.0-SNAPSHOT"
+(defproject guestbook "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :dependencies [[org.clojure/clojure "1.10.0"]
@@ -9,9 +9,9 @@
                  [org.xerial/sqlite-jdbc "3.36.0.3"]
                  [lib-noir "0.7.6"]]
   :plugins [[lein-ring "0.12.5"]]
-  :ring {:handler guessbook.handler/app
-         :init guessbook.handler/init
-         :destroy guessbook.handler/destroy}
+  :ring {:handler guestbook.handler/app
+         :init guestbook.handler/init
+         :destroy guestbook.handler/destroy}
   :profiles
   {:uberjar {:aot :all}
    :production

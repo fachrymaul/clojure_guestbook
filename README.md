@@ -1,6 +1,6 @@
-# guessbook
+# guestbook
 
-FIXME
+This is a clojure web development learning journey following Dmitri Sotnikov's book Web Development with Clojure.
 
 ## Prerequisites
 

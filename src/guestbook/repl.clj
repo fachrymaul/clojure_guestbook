@@ -1,5 +1,5 @@
-(ns guessbook.repl
-  (:use guessbook.handler
+(ns guestbook.repl
+  (:use guestbook.handler
         ring.server.standalone
         [ring.middleware file-info file]))
 

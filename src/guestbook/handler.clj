@@ -9,7 +9,9 @@
             [guestbook.models.db :as db]
             [guestbook.routes.auth :refer [auth-routes]]
             [noir.session :as session]
-            [ring.middleware.session.memory :refer [memory-store]]))
+            [ring.middleware.session.memory :refer [memory-store]]
+            [noir.validation :refer [wrap-noir-validation]]
+            ))
 
 (defn init []
   (println "guestbook is starting")
@@ -31,4 +33,5 @@
        app-routes)
       (handler/site)
       (wrap-base-url)
-      (session/wrap-noir-session {:store (memory-store)})))
+      (session/wrap-noir-session {:store (memory-store)})
+      (wrap-noir-validation)))

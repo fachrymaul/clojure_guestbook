@@ -33,3 +33,24 @@
   (sql/insert! db-spec
    :guestbook
    {:name name, :message message, :timestamp (new java.util.Date)}))
+
+(def user-table-ddl
+  (sql/create-table-ddl :users
+                        [[:id "varchar(20) PRIMARY KEY"]
+                         [:pass "varchar(100)"]]))
+
+(defn create-user-table []
+  (sql/db-do-commands db-spec
+                      [user-table-ddl
+                       "CREATE INDEX id_index ON users (id);"]))
+
+(defn add-user-record [user]
+  (sql/insert! db-spec
+               :users
+               {:id (:id user), :pass (:pass user)}))
+
+(defn get-user [id]
+  (first (sql/query db-spec ["SELECT * FROM users WHERE ID = ?" id])))
+
+(defn get-all-user []
+  (sql/query db-spec ["SELECT * FROM users"]))

@@ -7,50 +7,53 @@
          :subprotocol "sqlite",
          :subname     "db.sq3"})
 
-(def db-spec
-  {:dbtype "sqlite"
-   :dbname "mydb"
-   :user "myaccount"
-   :password "secret"
-   })
-
-(def guestbook-table-ddl
- (sql/create-table-ddl :guestbook
-     [[:id "INTEGER PRIMARY KEY AUTOINCREMENT"]
-      [:timestamp "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"]
-      [:name "TEXT"]
-      [:message "TEXT"]]))
-
 (defn create-guestbook-table []
-  (sql/db-do-commands db-spec
-   [guestbook-table-ddl
-    "CREATE INDEX timestamp_index ON guestbook (timestamp);"]))
+  (sql/with-connection
+   db
+   (sql/create-table
+    :guestbook
+    [:id "INTEGER PRIMARY KEY AUTOINCREMENT"]
+    [:timestamp "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"]
+    [:name "TEXT"]
+    [:message "TEXT"])
+   (sql/do-commands "CREATE INDEX timestamp_index ON guestbook (timestamp)")))
 
-(defn read-guess []
-  (sql/query db-spec ["SELECT * FROM guestbook ORDER BY timestamp DESC"]))
+(defn read-guests []
+  (sql/with-connection
+    db
+    (sql/with-query-results res
+      ["SELECT * FROM guestbook ORDER BY timestamp DESC"]
+      (doall res))))
 
 (defn save-message [name message]
-  (sql/insert! db-spec
-   :guestbook
-   {:name name, :message message, :timestamp (new java.util.Date)}))
-
-(def user-table-ddl
-  (sql/create-table-ddl :users
-                        [[:id "varchar(20) PRIMARY KEY"]
-                         [:pass "varchar(100)"]]))
+  (sql/with-connection
+    db
+    (sql/insert-values
+     :guestbook
+     [:name :message :timestamp]
+     [name message (new java.util.Date)])))
 
 (defn create-user-table []
-  (sql/db-do-commands db-spec
-                      [user-table-ddl
-                       "CREATE INDEX id_index ON users (id);"]))
+  (sql/with-connection
+   db
+   (sql/create-table
+    :users
+    [:id "varchar(20) PRIMARY KEY"]
+    [:pass "varchar(100)"])))
+
+(defn create-user-table []
+  (sql/with-connection
+    db
+    (sql/create-table
+     :users
+     [:id "varchar(20) PRIMARY KEY"]
+     [:pass "varchar(100)"])))
 
 (defn add-user-record [user]
-  (sql/insert! db-spec
-               :users
-               {:id (:id user), :pass (:pass user)}))
+  (sql/with-connection db
+    (sql/insert-record :users user)))
 
 (defn get-user [id]
-  (first (sql/query db-spec ["SELECT * FROM users WHERE ID = ?" id])))
-
-(defn get-all-user []
-  (sql/query db-spec ["SELECT * FROM users"]))
+  (sql/with-connection db
+    (sql/with-query-results
+      res ["select * from users where id = ?" id] (first res))))

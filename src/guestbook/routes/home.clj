@@ -12,7 +12,7 @@
 
 (defn show-guests []
   [:ul.guests
-   (for [{:keys [message name timestamp]} (db/read-guess)]
+   (for [{:keys [message name timestamp]} (db/read-guests)]
      [:li
       [:blockquote message]
       [:p "-" [:cite name]]
